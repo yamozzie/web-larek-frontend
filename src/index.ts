@@ -35,12 +35,6 @@ events.on('ui:basket-remove', () => {
     basketModel.delete
 });
 
-/* function renderCatalog(ids: string[]) {
-    const items = ids.map(id => {
-        const itemView = new catalogItemView(document.getElementById('#card-catalog') as HTMLTemplateElement, events);
-        return itemView.render(catalogModel.getProduct(id))
-    })
-} */
 function renderCatalog(products: IProduct[]) {
     const itemTemplate = document.querySelector('#catalog-item-template') as HTMLTemplateElement;
     
