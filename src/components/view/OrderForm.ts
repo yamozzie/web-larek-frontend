@@ -23,7 +23,7 @@ export class Order implements IOrder {
         this.buttonAll.forEach(item => {
             item.addEventListener('click', () => {
                 this.paymentSelection = item.name;
-                events.emit('order:paymentselection', item);
+                events.emit('order:payment-change', item);
             });
           });
 
@@ -31,7 +31,7 @@ export class Order implements IOrder {
             const target = event.target as HTMLInputElement;
             const field = target.name;
             const value = target.value;
-            this.events.emit(`order:changeAddress`, { field, value });
+            this.events.emit(`order:address-change`, { field, value });
           });
     };
 

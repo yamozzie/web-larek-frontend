@@ -25,7 +25,7 @@ export class Contacts implements IContacts {
                 const target = event.target as HTMLInputElement;
                 const field = target.name;
                 const value = target.value;
-                this.events.emit('contacts:changeInput', { field, value })
+                this.events.emit('contacts:input-change', { field, value })
             })
         });
 
