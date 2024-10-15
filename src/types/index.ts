@@ -7,7 +7,7 @@ export interface IProduct {
     price: number | null;
 };
 
-export interface IOrder {
+export interface IOrderForm {
     payment: string;
     email: string;
     phone: string;

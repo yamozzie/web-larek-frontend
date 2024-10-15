@@ -1,18 +1,20 @@
 import './scss/styles.scss';
-import { IProduct, IOrder } from './types';
+import { IProduct } from './types';
 import { EventEmitter } from './components/base/events';
 import { BasketModel } from './components/model/BasketModel';
 import { CatalogModel } from './components/model/CatalogModel';
 import { BasketItemView } from './components/view/BasketItem';
 import { BasketView } from './components/view/Basket';
-import { API_URL } from './utils/constants';
-import { catalogItemView } from './components/view/CatalogItem'
+import { catalogItemView } from './components/view/CatalogItem';
+import { Modal } from './components/view/Modal';
+import { ModalSuccess } from './components/view/ModalSuccess';
+import { Order } from './components/view/OrderForm';
 
 const events = new EventEmitter();
 const basketView = new BasketView(document.querySelector('.basket'));
 const basketModel = new BasketModel();
 const catalogModel = new CatalogModel();
-
+const products = catalogModel.items;
 
 function renderBasket(ids: string[]) {
     const items = ids.map(id => {
@@ -48,5 +50,4 @@ function renderCatalog(products: IProduct[]) {
     });
 }
 
-const products = catalogModel.items;
 renderCatalog(products);
