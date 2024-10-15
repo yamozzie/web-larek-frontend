@@ -1,12 +1,6 @@
 import { IEvents } from "../base/events";
 
-export interface IModal {
-    open(): void;
-    close(): void;
-    render(): HTMLElement;
-}
-
-export class Modal implements IModal {
+export class Modal {
     protected modalContainer: HTMLElement;
     protected closeButton: HTMLButtonElement;
     protected modalContent: HTMLElement;

@@ -1,13 +1,6 @@
 import { IEvents } from "../base/events";
 
-export interface IModalSuccess {
-    success: HTMLDivElement;
-    description: HTMLElement;
-    button: HTMLButtonElement;
-    render(total: number): HTMLElement;
-}
-
-export class ModalSuccess implements IModalSuccess {
+export class ModalSuccess {
     success: HTMLDivElement;
     description: HTMLElement;
     button: HTMLButtonElement;

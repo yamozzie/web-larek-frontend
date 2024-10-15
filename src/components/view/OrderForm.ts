@@ -1,14 +1,6 @@
 import { IEvents } from '../base/events';
 
-export interface IOrder {
-    formOrder: HTMLFormElement;
-    buttonAll: HTMLButtonElement[];
-    paymentSelection: String;
-    formErrors: HTMLElement;
-    render(): HTMLElement;
-}
-
-export class Order implements IOrder {
+export class Order {
     formOrder: HTMLFormElement;
     buttonAll: HTMLButtonElement[];
     buttonSubmit: HTMLButtonElement;

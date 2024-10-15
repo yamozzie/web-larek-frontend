@@ -1,14 +1,6 @@
 import { IEvents } from "../base/events";
 
-export interface IContacts {
-    formContacts: HTMLFormElement;
-    inputAll: HTMLInputElement[];
-    buttonSubmit: HTMLButtonElement;
-    formErrors: HTMLElement;
-    render(): HTMLElement;
-}
-
-export class Contacts implements IContacts {
+export class Contacts {
     formContacts: HTMLFormElement;
     inputAll: HTMLInputElement[];
     buttonSubmit: HTMLButtonElement;
