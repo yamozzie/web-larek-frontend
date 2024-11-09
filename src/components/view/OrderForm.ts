@@ -9,9 +9,10 @@ export class Order {
     constructor(protected template: HTMLTemplateElement, protected events: IEvents) {
         this.formOrder = template.content.querySelector('.form').cloneNode(true) as HTMLFormElement;
         this.buttonAll = Array.from(this.formOrder.querySelectorAll('.button_alt'));
-        this.buttonSubmit = this.formOrder.querySelector('.order__button')!;
+        this.buttonSubmit = this.formOrder.querySelector('.order__button');
         this.formErrors = this.formOrder.querySelector('.form__errors');
 
+        this.buttonSubmit.removeAttribute('disabled')
         this.buttonAll.forEach(item => {
             item.addEventListener('click', () => {
                 this.paymentSelection = item.name;
@@ -25,6 +26,11 @@ export class Order {
             const value = target.value;
             this.events.emit(`order:address-change`, { field, value });
           });
+
+        this.formOrder.addEventListener('submit', (evt: Event) => {
+            evt.preventDefault();
+            events.emit('ui:contacts-open')
+        })
     };
 
     set paymentSelection(paymentMethod: string) {
@@ -34,7 +40,10 @@ export class Order {
       }
     
     set valid(value: boolean) {
-        this.buttonSubmit.disabled = !value;
+        if (value) {
+            this.buttonSubmit.removeAttribute('disabled')
+        }
+        // this.buttonSubmit.disabled = !value;
     }
 
     render() {

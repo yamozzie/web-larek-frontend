@@ -9,8 +9,8 @@ export class Contacts {
     constructor(template: HTMLTemplateElement, protected events: IEvents) {
         this.formContacts = template.content.querySelector('.form')!.cloneNode(true) as HTMLFormElement;
         this.inputAll = Array.from(this.formContacts.querySelectorAll('.form__input'));
-        this.buttonSubmit = template.querySelector('.button')!;
-        this.formErrors = template.querySelector('.form__errors')!;
+        this.buttonSubmit = this.formContacts.querySelector('.button');
+        this.formErrors = this.formContacts.querySelector('.form__errors');
 
         this.inputAll.forEach(item => {
             item.addEventListener('input', (event) => {
@@ -23,8 +23,14 @@ export class Contacts {
 
         this.formContacts.addEventListener('submit', (event: Event) => {
             event.preventDefault();
-            this.events.emit('success:open')
+            this.events.emit('ui:success-open')
         })
+    }
+
+    set valid(value: boolean) {
+        if (value) {
+            this.buttonSubmit.removeAttribute('disabled')
+        }
     }
 
     render() {

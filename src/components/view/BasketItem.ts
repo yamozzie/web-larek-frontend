@@ -1,26 +1,36 @@
+import { IProduct } from "../../types";
 import { IEvents } from "../base/events";
 
+export interface IBasketItemView {
+    items: HTMLElement;
+    index: HTMLElement;
+    title: HTMLElement;
+    price: HTMLElement
+    deleteButton: HTMLButtonElement;
+    render(data: IProduct, item: number): HTMLElement;
+}
+
 export class BasketItemView {
-    protected title: HTMLSpanElement;
-    protected addButton: HTMLButtonElement;
-    protected deleteButton: HTMLButtonElement;
-    protected id: string | null = null;
+    items: HTMLElement;
+    index: HTMLElement;
+    title: HTMLSpanElement;
+    price: HTMLElement
+    deleteButton: HTMLButtonElement;
 
-    constructor(protected container: HTMLTemplateElement, protected events: IEvents) {
-        this.title = container.querySelector('.card__title') as HTMLSpanElement;
-        this.addButton = container.querySelector('.card__button') as HTMLButtonElement;
-        this.deleteButton = container.querySelector('.basket__item-delete') as HTMLButtonElement;
+    constructor(protected template: HTMLTemplateElement, protected events: IEvents) {
+        this.items = template.content.querySelector('.basket__item').cloneNode(true) as HTMLElement;
+        this.index = this.items.querySelector('.basket__item-index');
+        this.title = this.items.querySelector('.card__title');
+        this.price = this.items.querySelector('.card__price');
+        this.deleteButton = this.items.querySelector('.basket__item-delete') as HTMLButtonElement;
 
-        this.addButton.addEventListener('click', () => this.events.emit('ui:basket-add', { id: this.id }));
-
-        this.deleteButton.addEventListener('click', () => this.events.emit('ui:basket-delete', { id: this.id }));
+        this.deleteButton.addEventListener('click', () => events.emit('ui:basket-item-remove', this.items ))
     }
 
-    render(data: { id: string, title: string }) {
-        if (data) {
-            this.id = data.id;
-            this.title.textContent = data.title;
-        }
-        return this.container
+    render(data: IProduct, index: number) {
+        this.index.textContent = String(index);
+        this.title.textContent = data.title;
+        this.price.textContent = data.price !== null ? `${data.price} синапсов` : 'Бесценно';
+        return this.items;
     }
 }

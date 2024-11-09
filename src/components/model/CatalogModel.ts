@@ -1,16 +1,19 @@
 import { IProduct } from "../../types";
-import { API_URL } from "../../utils/constants";
+import { IEvents } from '../base/events';
 
 export interface ICatalogModel {
     items: IProduct[];
+    selectedCard: IProduct;
     setItems(items: IProduct[]): void;
     getProduct(id: string): void;
+    setPreview(item: IProduct): void;
 }
 
 export class CatalogModel implements ICatalogModel {
     protected _items: IProduct[];
+    selectedCard: IProduct;
 
-    constructor() {
+    constructor(protected events: IEvents) {
         this._items = [];
     }
 
@@ -28,5 +31,10 @@ export class CatalogModel implements ICatalogModel {
 
     getProduct(id: string): IProduct | undefined {
         return this._items.find(item => item.id === id);
+    }
+
+    setPreview(item: IProduct): void {
+        this.selectedCard = item;
+        this.events.emit('modalCard:open', item);
     }
 }

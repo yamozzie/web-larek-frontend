@@ -6,7 +6,7 @@ export class Modal {
     protected modalContent: HTMLElement;
 
     constructor(template: HTMLElement, protected events: IEvents) {
-        this.modalContainer = template.querySelector('.modal')
+        this.modalContainer = template
         this.closeButton = template.querySelector('.modal__close');
         this.modalContent = template.querySelector('.modal__content');
 
@@ -14,10 +14,8 @@ export class Modal {
     }
 
     set content(value: HTMLElement) {
-        while (this.modalContent.firstChild) {
-            this.modalContent.removeChild(this.modalContent.firstChild);
-        }
-        this.modalContent.appendChild(value)
+      this.modalContent.innerHTML = '';
+      this.modalContent.appendChild(value);
       }
     
       open() {

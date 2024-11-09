@@ -2,6 +2,8 @@ import { IProduct } from "../../types";
 
 export interface IBasketModel {
     items: IProduct[];
+    counter: () => number;
+    sum: () => number;
     add(data: IProduct): void;
     delete(data: IProduct): void;
 };
@@ -17,14 +19,35 @@ export class BasketModel implements IBasketModel {
         this._items = data
     }
 
+    get items(): IProduct[] {
+        return this._items;
+    }
+
+    counter() {
+        return this.items.length
+    }
+
+    sum() {
+        let sum = 0;
+        this._items.forEach(item => {
+            sum += item.price;
+        });
+    
+        return sum;
+    }
+
     add(data: IProduct) {
         this._items.push(data) 
     }
 
-    delete(data: IProduct) {
-        const index = this._items.findIndex(item => item.id === data.id);
-        if (index > 0) {
-            this._items.splice(index, 1)
+    delete(item: IProduct) {
+        const index = this._items.indexOf(item)
+        if (index >= 0) {
+            this._items.splice(index, 1);
         }
+    }
+
+    clear() {
+        this._items = []
     }
  };
