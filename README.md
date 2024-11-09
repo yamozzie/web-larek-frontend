@@ -55,8 +55,30 @@ yarn build
 Интерфейс **IOrder**
 Содержит поля для составления заказа
 
+Интерфейс **IOrderForm**
+Содержит информацию о заказе, включая метод оплаты, контактные данные, адрес, итоговую сумму и список товаров
+
+
+Интерфейс **IOrderResult**
+Интерфейс результата заказа
+
+Интерфейс **FormErrors**
+Тип ошибок формы
+
 
 ### Модели данных (Model)
+
+#### ApiModel
+
+Класс **ApiModel** предназначен для работы с сервером и взаимодействиея с API
+
+Атрибуты:
+- cdn — базовый URL для изображений.
+- items — массив продуктов типа IProduct.
+
+Методы:
+- getListCard(): Promise<IProduct[]> — получение списка продуктов.
+- postOrderLot(order: IOrderForm): Promise<IOrderResult> — отправка заказа на сервер.
 
 #### BasketModel
  
@@ -68,6 +90,7 @@ yarn build
 Методы:
 - add(data: IProduct): добавляет товар в корзину.
 - delete(data: IProduct): удаляет товар из корзины по id.
+- sum() — возвращает общую сумму товаров в корзине.
 - set items(data: IProduct[]): задает новый массив товаров.
 
 #### CatalogModel
@@ -76,10 +99,12 @@ yarn build
 
 Атрибут:
 - _items: массив объектов IProduct, содержащий товары каталога.
+selectedCard — выбранный продукт для предпросмотра.
 
 Методы:
 - setItems(items: IProduct[]): задает массив продуктов для каталога.
 - getProduct(id: string): возвращает объект продукта по id.
+- setPreview(item: IProduct) — устанавливает продукт для предпросмотра.
 
 #### FormModel
 
@@ -92,10 +117,13 @@ yarn build
 - phone: Телефон.
 - total: Общая сумма заказа.
 - items: Массив товаров в заказе.
+- formErrors: Объект с ошибками формы.
 
 Методы:
 - setOrderAddress(field: string, value: string): Устанавливает адрес заказа по полю.
 - setOrderData(field: string, value: string): Устанавливает данные заказа (email и телефон).
+- orderValidate() — валидация данных заказа.
+- contactsValidate() — валидация контактных данных.
 - getOrder(): Возвращает объект с текущими данными заказа.
 
 ### Модели представления (View)
@@ -108,6 +136,8 @@ yarn build
 - container: элемент HTML, который рендерит корзину.
 
 Метод:
+- renderHeaderBasketCounter(value: number) — обновляет счетчик товаров в корзине.
+- renderSumAllProducts(sum: number) — отображает общую сумму товаров.
 - render(data: { items: HTMLElement[] }): рендер корзины.
 
 #### BasketItemView
@@ -198,6 +228,7 @@ yarn build
 - formErrors: Контейнер для ошибок.
 
 Метод:
+- set valid(value: boolean): Устанавливает состояние кнопки отправки в зависимости от валидности формы.
 - render(): Рендерит форму контактов.
 
 ### Связующая модель (Presenter)
