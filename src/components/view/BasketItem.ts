@@ -24,7 +24,7 @@ export class BasketItemView {
         this.price = this.items.querySelector('.card__price');
         this.deleteButton = this.items.querySelector('.basket__item-delete') as HTMLButtonElement;
 
-        this.deleteButton.addEventListener('click', () => events.emit('ui:basket-item-remove', this.items ))
+        this.deleteButton.addEventListener('click', () => {events.emit('ui:basket-item-remove', this.items)})
     }
 
     render(data: IProduct, index: number) {

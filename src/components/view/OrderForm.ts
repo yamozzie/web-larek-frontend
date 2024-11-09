@@ -12,7 +12,6 @@ export class Order {
         this.buttonSubmit = this.formOrder.querySelector('.order__button');
         this.formErrors = this.formOrder.querySelector('.form__errors');
 
-        this.buttonSubmit.removeAttribute('disabled')
         this.buttonAll.forEach(item => {
             item.addEventListener('click', () => {
                 this.paymentSelection = item.name;
