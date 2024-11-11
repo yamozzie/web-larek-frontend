@@ -5,7 +5,6 @@ export interface ICatalogModel {
     items: IProduct[];
     selectedCard: IProduct;
     setItems(items: IProduct[]): void;
-    getProduct(id: string): void;
     setPreview(item: IProduct): void;
 }
 
@@ -27,10 +26,6 @@ export class CatalogModel implements ICatalogModel {
 
     setItems(items: IProduct[]): void {
         this._items = items;
-    }
-
-    getProduct(id: string): IProduct | undefined {
-        return this._items.find(item => item.id === id);
     }
 
     setPreview(item: IProduct): void {

@@ -2,7 +2,7 @@ import { IProduct } from "../../types";
 import { IEvents } from "../base/events";
 
 export class CatalogItemView {
-    protected element: HTMLButtonElement;
+    protected element: HTMLElement;
     protected cardCategory: HTMLSpanElement;
     protected card: HTMLElement;
     protected title: HTMLHeadElement;
@@ -17,12 +17,12 @@ export class CatalogItemView {
         "другое": "other"
     }
 
-    constructor(protected container: HTMLElement, protected events: IEvents) {
-        this.element = container.querySelector('.gallery__item') as HTMLButtonElement;
-        this.cardCategory = container.querySelector('.card__category') as HTMLSpanElement;
-        this.title = container.querySelector('.card__title') as HTMLHeadElement;
-        this.image = container.querySelector('.card__image') as HTMLImageElement;
-        this.price = container.querySelector('.card__price') as HTMLSpanElement;
+    constructor(template: HTMLTemplateElement, protected events: IEvents) {
+        this.element = template.content.querySelector('.card').cloneNode(true) as HTMLElement;
+        this.cardCategory = this.element.querySelector('.card__category') as HTMLSpanElement;
+        this.title = this.element.querySelector('.card__title') as HTMLHeadElement;
+        this.image = this.element.querySelector('.card__image') as HTMLImageElement;
+        this.price = this.element.querySelector('.card__price') as HTMLSpanElement;
     }
 
     protected setText(element: HTMLElement, value: unknown): string {
@@ -36,7 +36,7 @@ export class CatalogItemView {
         this.cardCategory.className = `card__category card__category_${this.colors[value]}`
     }
 
-    render(data: IProduct) {
+    render(data: IProduct): HTMLElement {
         if (data) {
             this.id = data.id;
             this.title.textContent = data.title;
@@ -46,6 +46,6 @@ export class CatalogItemView {
             this.price.textContent = data.price !== null ? `${data.price} синапсов` : 'Бесценно';
         }
 
-        return this.container
+        return this.element
     }
 }

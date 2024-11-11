@@ -12,10 +12,10 @@ export class CardPreview extends CatalogItemView implements ICard {
     text: HTMLElement;
     button: HTMLElement;
 
-    constructor(container: HTMLElement, protected events: IEvents) {
-        super(container, events)
-        this.text = this.container.querySelector('.card__text')!;
-        this.button = this.container.querySelector('.card__button')!;
+    constructor(template: HTMLTemplateElement, protected events: IEvents) {
+        super(template, events);
+        this.text = this.element.querySelector('.card__text')!;
+        this.button = this.element.querySelector('.card__button')!;
         this.button.addEventListener('click', () => { this.events.emit('ui:basket-add') });
     }
 
@@ -35,6 +35,6 @@ export class CardPreview extends CatalogItemView implements ICard {
         this.price.textContent = data.price !== null ? `${data.price} синапсов` : 'Бесценно';
         this.text.textContent = data.description;
 
-        return this.container
+        return this.element
     }
 }

@@ -30,7 +30,6 @@ const catalogTemplate = document.querySelector('#card-catalog') as HTMLTemplateE
 const basketTemplate = document.querySelector('#card-basket') as HTMLTemplateElement;
 const modalSuccessTemplate = document.querySelector('#success') as HTMLTemplateElement;
 const itemContainer = catalogTemplate.content.firstElementChild.cloneNode(true) as HTMLElement;
-console.log(catalogTemplate.content.querySelector('.card'))
 
 function renderCatalog() {
     const container = document.querySelector('.gallery');
@@ -38,14 +37,13 @@ function renderCatalog() {
 
     apiModel.getListCard()
     .then((products: IProduct[]) => {
+        console.log(products)
         catalogModel.setItems(products);
         const productView = products.map((product) => {
-        const itemContainer = catalogTemplate.content.firstElementChild.cloneNode(true) as HTMLElement;
-        console.log(product)
-        const itemView = new CatalogItemView(itemContainer, events);
-        cardPreview(itemContainer, product);
-        itemView.render(product);
-        return itemContainer;
+            const itemView = new CatalogItemView(catalogTemplate, events);
+            const itemContainer = itemView.render(product); // Используем `itemView.render`, который возвращает готовую карточку
+            cardPreview(itemContainer, product);
+            return itemContainer;
         });
 
         catalog.render({ items: productView });
@@ -54,8 +52,8 @@ function renderCatalog() {
 
 function cardPreview(container: HTMLElement, item: IProduct) {
     container.addEventListener('click', () => {
-        const previewContainer = previewTemplate.content.firstElementChild.cloneNode(true) as HTMLElement;
-        const previewView = new CardPreview(previewContainer, events);
+        const previewView = new CardPreview(previewTemplate, events);
+        const previewContainer = previewView.render(item);
         catalogModel.selectedCard = item;
         previewView.render(item);
         modal.content = previewContainer;
