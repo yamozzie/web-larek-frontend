@@ -1,4 +1,4 @@
-export class catalogView {
+export class CatalogView {
     constructor(protected container: HTMLElement) {}
     render(data: { items: HTMLElement[] }) {
         if (data) {

@@ -6,8 +6,8 @@ import { CatalogModel } from './components/model/CatalogModel';
 import { BasketItemView } from './components/view/BasketItem';
 import { FormModel } from './components/model/FormModel';
 import { BasketView } from './components/view/Basket';
-import { catalogItemView } from './components/view/CatalogItem';
-import { catalogView } from './components/view/Catalog';
+import { CatalogItemView } from './components/view/CatalogItem';
+import { CatalogView } from './components/view/Catalog';
 import { Modal } from './components/view/Modal';
 import { ModalSuccess } from './components/view/ModalSuccess';
 import { Order } from './components/view/OrderForm';
@@ -26,52 +26,23 @@ const modal = new Modal(document.querySelector('#modal-container'), events);
 const formModel = new FormModel(events);
 const apiModel = new ApiModel(CDN_URL, API_URL);
 const previewTemplate = document.querySelector('#card-preview') as HTMLTemplateElement;
-const template = document.querySelector('#card-catalog') as HTMLTemplateElement;
+const catalogTemplate = document.querySelector('#card-catalog') as HTMLTemplateElement;
 const basketTemplate = document.querySelector('#card-basket') as HTMLTemplateElement;
 const modalSuccessTemplate = document.querySelector('#success') as HTMLTemplateElement;
-const itemContainer = template.content.firstElementChild.cloneNode(true) as HTMLElement;
-const itemView = new catalogItemView(itemContainer, events);
-
-
-/* function renderCatalog() {
-    const catalogContainer = document.querySelector('.gallery');
-    const catalog = new catalogView(catalogContainer as HTMLElement);
-
-    apiModel.getListCard()
-    .then((products: IProduct[]) => {
-        catalogModel.setItems(products);
-        const productView = products.map((product) => {
-            const template = document.querySelector('#card-catalog') as HTMLTemplateElement;
-            const itemContainer = template.content.firstElementChild.cloneNode(true) as HTMLElement;
-            const itemView = new catalogItemView(itemContainer, events)
-            itemContainer.addEventListener('click', () => {
-                const previewContainer = previewTemplate.content.firstElementChild.cloneNode(true) as HTMLElement;
-                const previewView = new CardPreview(previewContainer, events);
-                catalogModel.selectedCard = product;
-                
-                previewView.render(product);
-                modal.content = previewContainer;
-                modal.render();
-            });
-            itemView.render(product);
-            return itemContainer;
-        })
-        catalog.render({ items: productView })
-    })
-    .catch((error) => console.log(error))
-}; */
+const itemContainer = catalogTemplate.content.firstElementChild.cloneNode(true) as HTMLElement;
+console.log(catalogTemplate.content.querySelector('.card'))
 
 function renderCatalog() {
     const container = document.querySelector('.gallery');
-    const catalog = new catalogView(container as HTMLElement);
+    const catalog = new CatalogView(container as HTMLElement);
 
     apiModel.getListCard()
     .then((products: IProduct[]) => {
         catalogModel.setItems(products);
         const productView = products.map((product) => {
-        const itemContainer = template.content.firstElementChild.cloneNode(true) as HTMLElement;
+        const itemContainer = catalogTemplate.content.firstElementChild.cloneNode(true) as HTMLElement;
         console.log(product)
-        const itemView = new catalogItemView(itemContainer, events);
+        const itemView = new CatalogItemView(itemContainer, events);
         cardPreview(itemContainer, product);
         itemView.render(product);
         return itemContainer;
@@ -93,8 +64,8 @@ function cardPreview(container: HTMLElement, item: IProduct) {
 }
 
 events.on('basket:change', () => {
-    basket.renderSumAllProducts(basketModel.sum());
-    basket.renderHeaderBasketCounter(basketModel.counter());
+    basket.renderSumAllProducts(basketModel.getTotalSum());
+    basket.renderHeaderBasketCounter(basketModel.getCount());
     let i = 0;
     basket.items = basketModel.items.map((item) => {
         const basketItem = new BasketItemView(document.querySelector('#card-basket'), events);
@@ -104,7 +75,6 @@ events.on('basket:change', () => {
 });
 
 events.on('ui:basket-open', () => {
-    events.emit('basket:change');
     modal.content = basket.render()
     modal.render()
 })
@@ -117,8 +87,6 @@ events.on('ui:basket-add', () => {
 
 events.on('ui:basket-item-remove', (item: IProduct) => {
     basketModel.delete(item);
-    console.log(item)
-    console.log(basketModel.delete(item))
     events.emit('basket:change');
 });
 
@@ -143,7 +111,7 @@ events.on('errors:address', (errors: Partial<IOrderForm>) => {
 })
 
 events.on('ui:contacts-open', () => {
-    formModel.total = basketModel.sum();
+    formModel.total = basketModel.getTotalSum();
     modal.content = contacts.render();
     modal.render()
 });
@@ -161,11 +129,10 @@ events.on('errors:contacts', (errors: Partial<IOrderForm>) => {
 events.on('ui:success-open', () => {
     apiModel.postOrderLot(formModel.getOrder())
       .then((data) => {
-        console.log(data)
         const success = new ModalSuccess(modalSuccessTemplate, events);
-        modal.content = success.render(basketModel.sum());
+        modal.content = success.render(basketModel.getTotalSum());
         basketModel.clear();
-        basket.renderHeaderBasketCounter(basketModel.counter());
+        basket.renderHeaderBasketCounter(basketModel.getCount());
         modal.render()
       })
       .catch((error) => { console.log(error) })

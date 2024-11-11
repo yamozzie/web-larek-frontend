@@ -2,8 +2,8 @@ import { IProduct } from "../../types";
 
 export interface IBasketModel {
     items: IProduct[];
-    counter: () => number;
-    sum: () => number;
+    getCount: () => number;
+    getTotalSum: () => number;
     add(data: IProduct): void;
     delete(data: IProduct): void;
 };
@@ -23,11 +23,11 @@ export class BasketModel implements IBasketModel {
         return this._items;
     }
 
-    counter() {
+    getCount() {
         return this.items.length
     }
 
-    sum() {
+    getTotalSum() {
         let sum = 0;
         this._items.forEach(item => {
             sum += item.price;

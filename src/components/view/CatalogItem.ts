@@ -1,7 +1,7 @@
 import { IProduct } from "../../types";
 import { IEvents } from "../base/events";
 
-export class catalogItemView {
+export class CatalogItemView {
     protected element: HTMLButtonElement;
     protected cardCategory: HTMLSpanElement;
     protected card: HTMLElement;

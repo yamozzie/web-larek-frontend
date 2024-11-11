@@ -1,4 +1,4 @@
-import { catalogItemView } from './CatalogItem';
+import { CatalogItemView } from './CatalogItem';
 import { IProduct } from '../../types';
 import { IEvents } from '../base/events';
 
@@ -8,7 +8,7 @@ export interface  ICard {
     render(data: IProduct): HTMLElement;
 }
 
-export class CardPreview extends catalogItemView implements ICard {
+export class CardPreview extends CatalogItemView implements ICard {
     text: HTMLElement;
     button: HTMLElement;
 
