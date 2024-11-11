@@ -29,7 +29,6 @@ const previewTemplate = document.querySelector('#card-preview') as HTMLTemplateE
 const catalogTemplate = document.querySelector('#card-catalog') as HTMLTemplateElement;
 const basketTemplate = document.querySelector('#card-basket') as HTMLTemplateElement;
 const modalSuccessTemplate = document.querySelector('#success') as HTMLTemplateElement;
-const itemContainer = catalogTemplate.content.firstElementChild.cloneNode(true) as HTMLElement;
 
 function renderCatalog() {
     const container = document.querySelector('.gallery');
@@ -41,7 +40,7 @@ function renderCatalog() {
         catalogModel.setItems(products);
         const productView = products.map((product) => {
             const itemView = new CatalogItemView(catalogTemplate, events);
-            const itemContainer = itemView.render(product); // Используем `itemView.render`, который возвращает готовую карточку
+            const itemContainer = itemView.render(product);
             cardPreview(itemContainer, product);
             return itemContainer;
         });
@@ -66,7 +65,7 @@ events.on('basket:change', () => {
     basket.renderHeaderBasketCounter(basketModel.getCount());
     let i = 0;
     basket.items = basketModel.items.map((item) => {
-        const basketItem = new BasketItemView(document.querySelector('#card-basket'), events);
+        const basketItem = new BasketItemView(basketTemplate, events);
         i += 1;
         return basketItem.render(item, i);
     });
