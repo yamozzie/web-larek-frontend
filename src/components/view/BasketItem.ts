@@ -22,15 +22,16 @@ export class BasketItemView {
         this.index = this.items.querySelector('.basket__item-index');
         this.title = this.items.querySelector('.card__title');
         this.price = this.items.querySelector('.card__price');
-        this.deleteButton = this.items.querySelector('.basket__item-delete') as HTMLButtonElement;
-
-        this.deleteButton.addEventListener('click', () => {events.emit('ui:basket-item-remove', this.items)})
+        this.deleteButton = this.items.querySelector('.basket__item-delete') as HTMLButtonElement;  
     }
 
     render(data: IProduct, index: number) {
         this.index.textContent = String(index);
         this.title.textContent = data.title;
         this.price.textContent = data.price !== null ? `${data.price} синапсов` : 'Бесценно';
+
+        this.deleteButton.addEventListener('click', () => {this.events.emit('ui:basket-item-remove', data)});
+
         return this.items;
     }
 }

@@ -37,15 +37,13 @@ export class BasketModel implements IBasketModel {
     }
 
     add(data: IProduct) {
-        this._items.push(data) 
+        this._items.push(data)
     }
 
     delete(item: IProduct) {
-        const index = this._items.findIndex(
-            (i) => i.title === item.title && i.price === item.price
-        );
-        if (index >= 0) {
-            this._items.splice(index, 1);
+        const index = this._items.indexOf(item)
+        if (index >= 0 ) {
+            this._items.splice(index, 1)
         }
     }
 

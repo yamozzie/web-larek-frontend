@@ -36,7 +36,6 @@ function renderCatalog() {
 
     apiModel.getListCard()
     .then((products: IProduct[]) => {
-        console.log(products)
         catalogModel.setItems(products);
         const productView = products.map((product) => {
             const itemView = new CatalogItemView(catalogTemplate, events);
@@ -55,6 +54,7 @@ function cardPreview(container: HTMLElement, item: IProduct) {
         const previewContainer = previewView.render(item);
         catalogModel.selectedCard = item;
         previewView.render(item);
+        previewView.sale(item)
         modal.content = previewContainer;
         modal.render();
     });
@@ -69,6 +69,14 @@ events.on('basket:change', () => {
         i += 1;
         return basketItem.render(item, i);
     });
+});
+
+events.on('modal:open', () => {
+    modal.locked = true
+});
+
+events.on('modal:close', () => {
+    modal.locked = false
 });
 
 events.on('ui:basket-open', () => {

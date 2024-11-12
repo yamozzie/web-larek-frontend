@@ -24,7 +24,7 @@ export class CardPreview extends CatalogItemView implements ICard {
             return 'Купить'
         } else {
             this.button.setAttribute('disabled', 'true')
-            return 'Не продается'
+            return this.button.textContent = 'Не продается'
         }
     }
 
