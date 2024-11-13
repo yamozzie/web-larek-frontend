@@ -40,25 +40,22 @@ function renderCatalog() {
             const productView = products.map((product) => {
                 const itemView = new CatalogItemView(catalogTemplate, events);
                 const itemContainer = itemView.render(product);
-                itemContainer.addEventListener('click', () => {
-                    handleCardPreview(itemContainer, product);
-                });
+                itemContainer.addEventListener('click', () => handleCardPreview(product));
+                
                 return itemContainer;
             });
+
             catalog.render({ items: productView });
         });
 }
 
-function handleCardPreview(container: HTMLElement, item: IProduct) {
-    container.addEventListener('click', () => {
-        const previewView = new CardPreview(previewTemplate, events);
-        const previewContainer = previewView.render(item);
-        catalogModel.selectedCard = item;
-        previewView.render(item);
-        previewView.sale(item);
-        modal.content = previewContainer;
-        modal.render();
-    });
+function handleCardPreview(item: IProduct) {
+    const previewView = new CardPreview(previewTemplate, events);
+    const previewContainer = previewView.render(item);
+    catalogModel.selectedCard = item;
+    previewView.sale(item);
+    modal.content = previewContainer;
+    modal.render();
 }
 
 events.on('basket:change', () => {
