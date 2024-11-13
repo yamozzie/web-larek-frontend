@@ -23,7 +23,7 @@ const catalogModel = new CatalogModel(events);
 const order = new Order(document.querySelector('#order'), events);
 const contacts = new Contacts(document.querySelector('#contacts'), events);
 const modal = new Modal(document.querySelector('#modal-container'), events);
-const formModel = new FormModel(events);
+const formModel = new FormModel(events, basketModel);
 const apiModel = new ApiModel(CDN_URL, API_URL);
 const previewTemplate = document.querySelector('#card-preview') as HTMLTemplateElement;
 const catalogTemplate = document.querySelector('#card-catalog') as HTMLTemplateElement;
@@ -35,26 +35,27 @@ function renderCatalog() {
     const catalog = new CatalogView(container as HTMLElement);
 
     apiModel.getListCard()
-    .then((products: IProduct[]) => {
-        catalogModel.setItems(products);
-        const productView = products.map((product) => {
-            const itemView = new CatalogItemView(catalogTemplate, events);
-            const itemContainer = itemView.render(product);
-            cardPreview(itemContainer, product);
-            return itemContainer;
+        .then((products: IProduct[]) => {
+            catalogModel.setItems(products);
+            const productView = products.map((product) => {
+                const itemView = new CatalogItemView(catalogTemplate, events);
+                const itemContainer = itemView.render(product);
+                itemContainer.addEventListener('click', () => {
+                    handleCardPreview(itemContainer, product);
+                });
+                return itemContainer;
+            });
+            catalog.render({ items: productView });
         });
-
-        catalog.render({ items: productView });
-    });
 }
 
-function cardPreview(container: HTMLElement, item: IProduct) {
+function handleCardPreview(container: HTMLElement, item: IProduct) {
     container.addEventListener('click', () => {
         const previewView = new CardPreview(previewTemplate, events);
         const previewContainer = previewView.render(item);
         catalogModel.selectedCard = item;
         previewView.render(item);
-        previewView.sale(item)
+        previewView.sale(item);
         modal.content = previewContainer;
         modal.render();
     });
@@ -98,7 +99,6 @@ events.on('ui:basket-item-remove', (item: IProduct) => {
 events.on('ui:order-open', () => {
     modal.content = order.render();
     modal.render();
-    formModel.items = basketModel.items.map(item => item.id)
 });
 
 events.on('order:payment-change', (button: HTMLButtonElement) => {
@@ -116,7 +116,6 @@ events.on('errors:address', (errors: Partial<IOrderForm>) => {
 })
 
 events.on('ui:contacts-open', () => {
-    formModel.total = basketModel.getTotalSum();
     modal.content = contacts.render();
     modal.render()
 });

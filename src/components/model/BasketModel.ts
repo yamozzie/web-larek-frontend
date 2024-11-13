@@ -4,19 +4,21 @@ export interface IBasketModel {
     items: IProduct[];
     getCount: () => number;
     getTotalSum: () => number;
+    getItemsIds: () => string[];
     add(data: IProduct): void;
     delete(data: IProduct): void;
-};
+    clear(): void;
+}
 
 export class BasketModel implements IBasketModel {
     protected _items: IProduct[];
-    
+
     constructor() {
         this._items = [];
     }
 
     set items(data: IProduct[]) {
-        this._items = data
+        this._items = data;
     }
 
     get items(): IProduct[] {
@@ -24,30 +26,29 @@ export class BasketModel implements IBasketModel {
     }
 
     getCount() {
-        return this.items.length
+        return this.items.length;
     }
 
     getTotalSum() {
-        let sum = 0;
-        this._items.forEach(item => {
-            sum += item.price;
-        });
-    
-        return sum;
+        return this._items.reduce((sum, item) => sum + item.price, 0);
+    }
+
+    getItemsIds() {
+        return this._items.map(item => item.id);
     }
 
     add(data: IProduct) {
-        this._items.push(data)
+        this._items.push(data);
     }
 
     delete(item: IProduct) {
-        const index = this._items.indexOf(item)
-        if (index >= 0 ) {
-            this._items.splice(index, 1)
+        const index = this._items.indexOf(item);
+        if (index >= 0) {
+            this._items.splice(index, 1);
         }
     }
 
     clear() {
-        this._items = []
+        this._items = [];
     }
- };
+}
