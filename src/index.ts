@@ -137,6 +137,7 @@ events.on('ui:success-open', () => {
         modal.content = success.render(basketModel.getTotalSum());
         basketModel.clear();
         basket.renderHeaderBasketCounter(basketModel.getCount());
+        events.emit('basket:change')
         modal.render()
       })
       .catch((error) => { console.log(error) })
